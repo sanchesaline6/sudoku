@@ -2,6 +2,7 @@ package br.com.dio;
 
 import br.com.dio.model.Board;
 import br.com.dio.model.Space;
+import br.com.dio.util.BoardTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,15 +52,76 @@ public class Main {
     }
 
     private static void finishGame() {
+        if(isNull(board)) {
+            System.out.println("O jogo ainda não foi iniciado");
+            return;
+        }
+
+        if(board.gameIsFinished()) {
+            System.out.println("Parabén você concluiu o jogo");
+            showCurrentGame();
+            board = null;
+        }
+        else if(board.hasErrors()){
+            System.out.println("Seu jogo contém erros, verifique seu board e ajuste-o");
+
+        }
+        else {
+            System.out.println("Você ainda precisa preencher algum espaço");
+        }
     }
 
     private static void clearGame() {
+        if(isNull(board)) {
+            System.out.println("O jogo ainda não foi iniciado");
+            return;
+        }
+
+        System.out.println("Tem certeza que deseja limpar seu jogo e perder todo seu progresso?");
+        System.out.print("Informe 'sim' ou 'não': ");
+        var confirm = scanner.next();
+        while(!confirm.equalsIgnoreCase("sim") && !confirm.equalsIgnoreCase("não")) {
+            System.out.print("Informe 'sim' ou 'não': ");
+            confirm = scanner.next();
+        }
+
+        if(confirm.equalsIgnoreCase("sim")) {
+            board.reset();
+        }
     }
 
     private static void showGameStatus() {
+        if(isNull(board)) {
+            System.out.println("O jogo ainda não foi iniciado");
+            return;
+        }
+
+        System.out.printf("O jogo atualmente se encontra no status %s\n", board.getStatus());
+        if(board.hasErrors()) {
+            System.out.println("O jogo contém erros");
+        }
+        else {
+            System.out.println("O jogo não contém erros");
+        }
     }
 
     private static void showCurrentGame() {
+        if(isNull(board)) {
+            System.out.println("O jogo ainda não foi iniciado");
+            return;
+        }
+
+        var args = new Object[81];
+        var argPos = 0;
+
+        for (int i = 0; i < BOARD_LIMIT; i++) {
+            for(var col: board.getSpaces()) {
+                args[argPos ++] = " " + (isNull(col.get(i).getActual()) ? " " : col.get(i).getActual());
+            }
+        }
+
+        System.out.println("Seu jogo se encontra da seguinte forma");
+        System.out.printf((BoardTemplate.BOARD_TEMPLATE) + "%n", args);
     }
 
     private static void removeNumber() {
