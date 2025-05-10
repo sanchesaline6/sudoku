@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toMap;
 
@@ -62,9 +63,40 @@ public class Main {
     }
 
     private static void removeNumber() {
+        if(isNull(board)) {
+            System.out.println("O jogo ainda não foi iniciado");
+            return;
+        }
+
+        System.out.println("Informe a coluna em que o número será inserido");
+        var col = runUntilGetValidNumber(0,8);
+
+        System.out.println("Informe a linha em que o número será inserido");
+        var row = runUntilGetValidNumber(0,8);
+
+        if(!board.clearValue(col, row)) {
+            System.out.printf("A posição [%s,%s] tem um valor fixo\n", col, row);
+        }
     }
 
     private static void inputNumber() {
+        if(isNull(board)) {
+            System.out.println("O jogo ainda não foi iniciado");
+            return;
+        }
+
+        System.out.println("Informe a coluna em que o número será inserido");
+        var col = runUntilGetValidNumber(0,8);
+
+        System.out.println("Informe a linha em que o número será inserido");
+        var row = runUntilGetValidNumber(0,8);
+
+        System.out.printf("Informe o número que vai entrar na posição [%s,%s]", col, row);
+        var value = runUntilGetValidNumber(1,9);
+
+        if(!board.changeValue(col, row, value)) {
+            System.out.printf("A posição [%s,%s] tem um valor fixo\n", col, row);
+        }
     }
 
     private static void startGame(Map<String, String> positions) {
@@ -87,5 +119,14 @@ public class Main {
 
         board = new Board(spaces);
         System.out.println("O jogo está pronto para começar");
+    }
+
+    private static int runUntilGetValidNumber(final int min, final int max) {
+        var current = scanner.nextInt();
+        while (current < min || current > max) {
+            System.out.printf("Informe um número entre %s e %s\n", min, max);
+            current = scanner.nextInt();
+        }
+        return current;
     }
 }
