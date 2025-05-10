@@ -5,7 +5,7 @@ public class Space {
     private final int expected;
     private final boolean fixed;
 
-    public Space(Integer actual, int expected, boolean fixed) {
+    public Space(final int expected, final boolean fixed) {
         this.expected = expected;
         this.fixed = fixed;
         if(fixed) {
