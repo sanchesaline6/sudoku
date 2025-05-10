@@ -1,8 +1,9 @@
-module com.example.sudoku {
+module br.com.dio.sudoku {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
 
-    opens com.example.sudoku to javafx.fxml;
-    exports com.example.sudoku;
+    opens br.com.dio.sudoku to javafx.fxml;
+    exports br.com.dio.sudoku;
 }
